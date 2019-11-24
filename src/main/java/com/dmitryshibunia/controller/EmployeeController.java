@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 @CrossOrigin
@@ -55,5 +56,16 @@ public class EmployeeController {
     public void deleteEmployee(@PathVariable Long id) throws RecordNotFoundException {
         LOGGER.info("Call deleteEmployee() method of EmployeeController");
         employeeService.deleteEmployee(id);
+    }
+
+    @PatchMapping(value = "/{filterFieldName}/{filterFieldNameValue}/{fieldToChangeName}/{fieldToChangeNameValue}")
+    @ResponseStatus(HttpStatus.OK)
+    public void patchEmployees(@PathVariable String filterFieldName,
+                               @PathVariable String filterFieldValue,
+                               @PathVariable String fieldToChangeName,
+                               @PathVariable String fieldToChangeValue) throws NoSuchFieldException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+        LOGGER.info("Call patchEmployees() method for employees with field {} = {}" , filterFieldName, filterFieldValue);
+
+        employeeService.patchEmployees(filterFieldName, fieldToChangeName, filterFieldValue, fieldToChangeValue);
     }
 }

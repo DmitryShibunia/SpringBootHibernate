@@ -2,12 +2,23 @@ package com.dmitryshibunia.service;
 
 import com.dmitryshibunia.exception.RecordNotFoundException;
 import com.dmitryshibunia.model.Employee;
+import com.dmitryshibunia.model.Message;
 import com.dmitryshibunia.repository.EmployeeRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.jms.core.JmsTemplate;
+import org.springframework.jms.core.MessageCreator;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,11 +26,13 @@ import java.util.Optional;
 public class EmployeeService {
 
     private EmployeeRepository employeeDAO;
+    private JmsTemplate jmsTemplate;
     private final Logger LOGGER = LogManager.getLogger();
 
     @Autowired
-    public EmployeeService(EmployeeRepository repository){
+    public EmployeeService(EmployeeRepository repository, JmsTemplate jmsTemplate){
         this.employeeDAO = repository;
+        this.jmsTemplate = jmsTemplate;
     }
 
     public List<Employee> getAllEmployees() {
@@ -69,4 +82,10 @@ public class EmployeeService {
             throw new RecordNotFoundException("No employee record exist for given id");
         }
     }
+
+    public void patchEmployees(String filterFieldName, String fieldToChangeName, String filterFieldValue, String fieldToChangeValue){
+        LOGGER.info("Call patchEmployees() method for employees with field {} = {}" , filterFieldName, filterFieldValue);
+        jmsTemplate.convertAndSend("mailbox", new Message(filterFieldName, fieldToChangeName, filterFieldValue, fieldToChangeValue));
+    }
+
 }

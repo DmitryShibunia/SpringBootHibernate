@@ -63,7 +63,7 @@ public class EmployeeController {
     public void patchEmployees(@PathVariable String filterFieldName,
                                @PathVariable String filterFieldValue,
                                @PathVariable String fieldToChangeName,
-                               @PathVariable String fieldToChangeValue) throws NoSuchFieldException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+                               @PathVariable String fieldToChangeValue) {
         LOGGER.info("Call patchEmployees() method for employees with field {} = {}" , filterFieldName, filterFieldValue);
 
         employeeService.patchEmployees(filterFieldName, fieldToChangeName, filterFieldValue, fieldToChangeValue);

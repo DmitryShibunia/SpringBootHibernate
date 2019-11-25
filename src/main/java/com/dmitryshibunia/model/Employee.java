@@ -1,5 +1,7 @@
 package com.dmitryshibunia.model;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
@@ -8,29 +10,37 @@ import java.util.Objects;
 
 @Entity
 @Table(name="employee", schema = "public")
+@ApiModel(description = "All details about the Employee. ")
 public class Employee {
 
+    @ApiModelProperty(notes = "The database generated employee ID")
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name = "employee_id")
     private Long id;
 
+    @ApiModelProperty(notes = "The employee first name")
     @Column(name = "first_name")
     private String firstName;
 
+    @ApiModelProperty(notes = "The employee last name")
     @Column(name = "last_name")
     private String lastName;
 
+    @ApiModelProperty(notes = "The department where employee works")
     @Column(name = "department_id")
     private Integer departmentId;
 
+    @ApiModelProperty(notes = "The employee job title")
     @Column(name = "job_title")
     private String jobTitle;
 
+    @ApiModelProperty(notes = "The employee gender")
     @Enumerated(EnumType.STRING)
     @Type(type = "com.dmitryshibunia.model.EnumTypePostgreSql")
     private Gender gender;
 
+    @ApiModelProperty(notes = "The employee date of birth")
     @Column(name = "date_of_birth")
     private LocalDate dateOfBirth;
 

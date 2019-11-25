@@ -3,6 +3,7 @@ package com.dmitryshibunia.controller;
 import com.dmitryshibunia.exception.RecordNotFoundException;
 import com.dmitryshibunia.model.Employee;
 import com.dmitryshibunia.service.EmployeeService;
+import io.swagger.annotations.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,13 @@ import java.util.List;
 @CrossOrigin
 @RequestMapping("/employees")
 @RestController
+@Api(value = "Employee Management System", description = "Operations pertaining to employee in Employee Management System")
+@ApiResponses(value = {
+        @ApiResponse(code = 401, message = "You are not authorized to view the resource"),
+        @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
+        @ApiResponse(code = 404, message = "The resource you were trying to reach is not found")
+
+})
 public class EmployeeController {
 
     private EmployeeService employeeService;
@@ -24,45 +32,75 @@ public class EmployeeController {
         this.employeeService = employeeService;
     }
 
+    @ApiOperation(value = "View a list of available employees", response = List.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully retrieved list")
+    })
     @GetMapping
     public List<Employee> getAllEmployees() {
         LOGGER.info("Call getAllEmployees() method of EmployeeController");
         return employeeService.getAllEmployees();
     }
 
+    @ApiOperation(value = "Get an employee by id", response = Employee.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully retrieved employee")
+    })
     @GetMapping("/{id}")
-    public Employee getEmployeeById(@PathVariable Long id) throws RecordNotFoundException {
+    public Employee getEmployeeById(
+            @ApiParam(value = "Employee id from which employee object will retrieve", required = true)
+            @PathVariable Long id) throws RecordNotFoundException {
         LOGGER.info("Call getEmployeeById() method of EmployeeController");
         return employeeService.getEmployeeById(id);
     }
 
+    @ApiOperation(value = "Add an employee", response = Integer.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Id of successfully added employee")
+    })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Integer addEmployee(@RequestBody Employee employee){
+    public Integer addEmployee(
+            @ApiParam(value = "Employee entity store in database table", required = true)
+            @RequestBody Employee employee){
         LOGGER.info("Call addEmployee() method of EmployeeController");
         return employeeService.addEmployee(employee);
     }
 
+    @ApiOperation(value = "Update an employee", response = Employee.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Updated employee entity")
+    })
     @PutMapping
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public Employee updateTeam(@RequestBody Employee employee) throws RecordNotFoundException {
+    public Employee updateTeam(
+            @ApiParam(value = "Employee entity store in database table", required = true)
+            @RequestBody Employee employee) throws RecordNotFoundException {
         LOGGER.info("Call updateTeam() method of EmployeeController");
         return employeeService.updateEmployee(employee);
     }
 
+    @ApiOperation(value = "Delete an employee by id")
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteEmployee(@PathVariable Long id) throws RecordNotFoundException {
+    public void deleteEmployee(
+            @ApiParam(value = "Employee entity store in database table", required = true)
+            @PathVariable Long id) throws RecordNotFoundException {
         LOGGER.info("Call deleteEmployee() method of EmployeeController");
         employeeService.deleteEmployee(id);
     }
 
+    @ApiOperation(value = "Change field 'fieldToChangeName' to 'fieldToChangeValue' for all employees with 'filterFieldName' = 'filterFieldValue'")
     @PatchMapping(value = "/{filterFieldName}/{filterFieldValue}/{fieldToChangeName}/{fieldToChangeValue}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void patchEmployees(@PathVariable String filterFieldName,
-                               @PathVariable String filterFieldValue,
-                               @PathVariable String fieldToChangeName,
-                               @PathVariable String fieldToChangeValue) {
+    public void patchEmployees( @ApiParam(value = "Column in database for filter employees", required = true)
+                                @PathVariable String filterFieldName,
+                                @ApiParam(value = "Value for filter employees", required = true)
+                                @PathVariable String filterFieldValue,
+                                @ApiParam(value = "Column in database which will be changed", required = true)
+                                @PathVariable String fieldToChangeName,
+                                @ApiParam(value = "New value for column 'fieldToChangeName'", required = true)
+                                @PathVariable String fieldToChangeValue) {
         LOGGER.info("Call patchEmployees() method for employees with field {} = {}" , filterFieldName, filterFieldValue);
         employeeService.patchEmployees(filterFieldName, fieldToChangeName, filterFieldValue, fieldToChangeValue);
     }

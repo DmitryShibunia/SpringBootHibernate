@@ -57,14 +57,13 @@ public class EmployeeController {
         employeeService.deleteEmployee(id);
     }
 
-    @PatchMapping(value = "/{filterFieldName}/{filterFieldNameValue}/{fieldToChangeName}/{fieldToChangeNameValue}")
-    @ResponseStatus(HttpStatus.OK)
+    @PatchMapping(value = "/{filterFieldName}/{filterFieldValue}/{fieldToChangeName}/{fieldToChangeValue}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void patchEmployees(@PathVariable String filterFieldName,
                                @PathVariable String filterFieldValue,
                                @PathVariable String fieldToChangeName,
                                @PathVariable String fieldToChangeValue) {
         LOGGER.info("Call patchEmployees() method for employees with field {} = {}" , filterFieldName, filterFieldValue);
-
         employeeService.patchEmployees(filterFieldName, fieldToChangeName, filterFieldValue, fieldToChangeValue);
     }
 }

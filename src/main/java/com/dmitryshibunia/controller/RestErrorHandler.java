@@ -15,5 +15,4 @@ public class RestErrorHandler {
         return "DataAccessException: " + ex.getLocalizedMessage();
     }
 
-
 }

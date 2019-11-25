@@ -77,6 +77,7 @@ public class EmployeeService {
     public void patchEmployees(String filterFieldName, String fieldToChangeName, String filterFieldValue, String fieldToChangeValue){
         LOGGER.info("Call patchEmployees() method for employees with field {} = {}" , filterFieldName, filterFieldValue);
         jmsTemplate.convertAndSend("mailbox", new Message(filterFieldName, fieldToChangeName, filterFieldValue, fieldToChangeValue));
+
     }
 
 }

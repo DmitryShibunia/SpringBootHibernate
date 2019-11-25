@@ -15,4 +15,9 @@ public class RestErrorHandler {
         return "DataAccessException: " + ex.getLocalizedMessage();
     }
 
+    @ExceptionHandler(NoSuchFieldException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public String handleNoSuchFieldException(NoSuchFieldException ex) {
+        return "DataAccessException: " + ex.getLocalizedMessage() + " field does not exist";
+    }
 }

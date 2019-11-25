@@ -100,7 +100,7 @@ public class EmployeeController {
                                 @ApiParam(value = "Column in database which will be changed", required = true)
                                 @PathVariable String fieldToChangeName,
                                 @ApiParam(value = "New value for column 'fieldToChangeName'", required = true)
-                                @PathVariable String fieldToChangeValue) {
+                                @PathVariable String fieldToChangeValue) throws NoSuchFieldException {
         LOGGER.info("Call patchEmployees() method for employees with field {} = {}" , filterFieldName, filterFieldValue);
         employeeService.patchEmployees(filterFieldName, fieldToChangeName, filterFieldValue, fieldToChangeValue);
     }

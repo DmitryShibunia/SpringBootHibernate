@@ -1,7 +1,6 @@
 package com.dmitryshibunia.repository;
 
 import com.dmitryshibunia.model.Employee;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +17,6 @@ public class EmployeeManager {
     @PersistenceContext
     private EntityManager em;
 
-    @Modifying
     @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
     public void updateEmployees(String filterFieldName, String fieldToChangeName, String filterFieldValue, String fieldToChangeValue) {
         CriteriaBuilder cb = this.em.getCriteriaBuilder();

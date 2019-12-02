@@ -16,7 +16,7 @@ public class RestErrorHandler {
     }
 
     @ExceptionHandler(NoSuchFieldException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public String handleNoSuchFieldException(NoSuchFieldException ex) {
         return "DataAccessException: " + ex.getLocalizedMessage() + " field does not exist";
     }

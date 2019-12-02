@@ -74,10 +74,10 @@ public class EmployeeService {
         }
     }
 
-    public void patchEmployees(String filterFieldName, String fieldToChangeName, String filterFieldValue, String fieldToChangeValue) throws NoSuchFieldException {
-        LOGGER.info("Call patchEmployees() method for employees with field {} = {}" , filterFieldName, filterFieldValue);
-        if(Employee.class.getDeclaredField(filterFieldName) != null && Employee.class.getDeclaredField(fieldToChangeName) != null)
-            jmsTemplate.convertAndSend("mailbox", new Message(filterFieldName, fieldToChangeName, filterFieldValue, fieldToChangeValue));
+    public void patchEmployees(Message message) throws NoSuchFieldException {
+        LOGGER.info("Call patchEmployees() method for employees with field {} = {}" , message.getFilterFieldName(), message.getFilterFieldValue());
+        if(Employee.class.getDeclaredField(message.getFilterFieldName()) != null && Employee.class.getDeclaredField(message.getFieldToChangeName()) != null)
+            jmsTemplate.convertAndSend("mailbox", message);
         else
             throw new NoSuchFieldException();
     }

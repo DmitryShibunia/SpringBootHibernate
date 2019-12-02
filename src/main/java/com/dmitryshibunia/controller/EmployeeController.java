@@ -2,6 +2,7 @@ package com.dmitryshibunia.controller;
 
 import com.dmitryshibunia.exception.RecordNotFoundException;
 import com.dmitryshibunia.model.Employee;
+import com.dmitryshibunia.model.Message;
 import com.dmitryshibunia.service.EmployeeService;
 import io.swagger.annotations.*;
 import org.apache.logging.log4j.LogManager;
@@ -91,17 +92,12 @@ public class EmployeeController {
     }
 
     @ApiOperation(value = "Change field 'fieldToChangeName' to 'fieldToChangeValue' for all employees with 'filterFieldName' = 'filterFieldValue'")
-    @PatchMapping(value = "/{filterFieldName}/{filterFieldValue}/{fieldToChangeName}/{fieldToChangeValue}")
+    @PatchMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void patchEmployees( @ApiParam(value = "Column in database for filter employees", required = true)
-                                @PathVariable String filterFieldName,
-                                @ApiParam(value = "Value for filter employees", required = true)
-                                @PathVariable String filterFieldValue,
-                                @ApiParam(value = "Column in database which will be changed", required = true)
-                                @PathVariable String fieldToChangeName,
-                                @ApiParam(value = "New value for column 'fieldToChangeName'", required = true)
-                                @PathVariable String fieldToChangeValue) throws NoSuchFieldException {
-        LOGGER.info("Call patchEmployees() method for employees with field {} = {}" , filterFieldName, filterFieldValue);
-        employeeService.patchEmployees(filterFieldName, fieldToChangeName, filterFieldValue, fieldToChangeValue);
+    public void patchEmployees(
+            @ApiParam(value = "2 pairs of parameters of query", required = true)
+            @RequestBody Message message) throws NoSuchFieldException {
+        LOGGER.info("Call patchEmployees() method for employees with field {} = {}" , message.getFilterFieldName(), message.getFilterFieldValue());
+        employeeService.patchEmployees(message);
     }
 }

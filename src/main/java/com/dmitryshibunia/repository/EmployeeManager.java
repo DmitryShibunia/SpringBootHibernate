@@ -17,7 +17,7 @@ public class EmployeeManager {
     @PersistenceContext
     private EntityManager em;
 
-    @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
+    @Transactional(readOnly = false)
     public void updateEmployees(String filterFieldName, String fieldToChangeName, String filterFieldValue, String fieldToChangeValue) {
         CriteriaBuilder cb = this.em.getCriteriaBuilder();
 
